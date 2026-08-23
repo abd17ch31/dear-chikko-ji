@@ -1,0 +1,6 @@
+{
+  "name": "Anniversary Celebration Experience",
+  "description": "An interactive romantic anniversary website experience featuring year countdowns, flaming particle reveal, balloon celebration, curved image carousels, draggable polaroids, sketchbook flipbook, and a 3D galaxy memory space.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
