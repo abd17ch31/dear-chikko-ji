@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion } from 'motion/react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import {
@@ -15,11 +15,12 @@ import {
 } from './data/defaultData';
 import { AnniversarySettings, MemoryPhoto, ScrapbookPage } from './types';
 import { Scene1Countdown } from './components/Scene1Countdown';
-import { Scene2Ribbon } from './components/Scene2Ribbon';
-import { Scene3Pinboard } from './components/Scene3Pinboard';
-import { Scene4Sketchbook } from './components/Scene4Sketchbook';
-import { Scene5Galaxy } from './components/Scene5Galaxy';
 import { PhotoLightboxModal } from './components/PhotoLightboxModal';
+
+const Scene2Ribbon = lazy(() => import('./components/Scene2Ribbon').then(m => ({ default: m.Scene2Ribbon })));
+const Scene3Pinboard = lazy(() => import('./components/Scene3Pinboard').then(m => ({ default: m.Scene3Pinboard })));
+const Scene4Sketchbook = lazy(() => import('./components/Scene4Sketchbook').then(m => ({ default: m.Scene4Sketchbook })));
+import { Scene5Galaxy } from './components/Scene5Galaxy';
 
 export default function App() {
   const [settings, setSettings] = useState<AnniversarySettings>(initialSettings);
@@ -138,11 +139,11 @@ export default function App() {
       </div>
 
       {/* Vertical Continuous Sections with Smooth Translation */}
-      <motion.div 
+      <motion.div
         className="flex flex-col w-full h-full"
         style={{ transform: 'translate3d(0,0,0)', willChange: 'transform' }}
         animate={{ y: `-${currentSectionIndex * 100}vh` }}
-        transition={{ duration: 1.0, ease: "easeInOut" }}
+        transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
       >
         {/* Section 1: Ignite Years Countdown */}
         <section 
@@ -159,63 +160,71 @@ export default function App() {
         </section>
 
         {/* Section 2: Happy Anniversary Ribbon & Quote */}
-        <section 
-          id="scene-2" 
+        <section
+          id="scene-2"
           className="h-screen w-full shrink-0 relative overflow-hidden"
           style={{ transform: 'translate3d(0,0,0)', willChange: 'transform' }}
         >
-          <Scene2Ribbon
-            settings={settings}
-            photos={photos}
-            onSelectPhoto={(photo) => setSelectedPhoto(photo)}
-            onNextScene={() => goToSection(1)}
-            active={currentSectionIndex <= 2}
-          />
+          <Suspense fallback={<div className="w-full h-full bg-slate-950" />}>
+            <Scene2Ribbon
+              settings={settings}
+              photos={photos}
+              onSelectPhoto={(photo) => setSelectedPhoto(photo)}
+              onNextScene={() => goToSection(1)}
+              active={currentSectionIndex <= 2}
+            />
+          </Suspense>
         </section>
 
         {/* Section 3: Draggable Memory Pinboard */}
-        <section 
-          id="scene-3" 
+        <section
+          id="scene-3"
           className="h-screen w-full shrink-0 relative overflow-hidden"
           style={{ transform: 'translate3d(0,0,0)', willChange: 'transform' }}
         >
-          <Scene3Pinboard
-            settings={settings}
-            photos={pinboardPhotos}
-            onSelectPhoto={(photo) => setSelectedPhoto(photo)}
-            onNextScene={() => goToSection(3)}
-            onAddPhoto={() => {}}
-            active={currentSectionIndex >= 1 && currentSectionIndex <= 3}
-          />
+          <Suspense fallback={<div className="w-full h-full bg-slate-950" />}>
+            <Scene3Pinboard
+              settings={settings}
+              photos={pinboardPhotos}
+              onSelectPhoto={(photo) => setSelectedPhoto(photo)}
+              onNextScene={() => goToSection(3)}
+              onAddPhoto={() => {}}
+              active={currentSectionIndex >= 1 && currentSectionIndex <= 3}
+            />
+          </Suspense>
         </section>
 
         {/* Section 4: Interactive Sketchbook */}
-        <section 
-          id="scene-4" 
+        <section
+          id="scene-4"
           className="h-screen w-full shrink-0 relative overflow-hidden"
           style={{ transform: 'translate3d(0,0,0)', willChange: 'transform' }}
         >
-          <Scene4Sketchbook
-            settings={settings}
-            pages={scrapbookPages}
-            onNextScene={() => goToSection(4)}
-            active={currentSectionIndex >= 2 && currentSectionIndex <= 4}
-          />
+          <Suspense fallback={<div className="w-full h-full bg-slate-950" />}>
+            <Scene4Sketchbook
+              settings={settings}
+              pages={scrapbookPages}
+              onNextScene={() => goToSection(4)}
+              active={currentSectionIndex >= 2 && currentSectionIndex <= 4}
+            />
+          </Suspense>
         </section>
 
         {/* Section 5: 3D Galaxy Memory Space */}
-        <section 
-          id="scene-5" 
+        <section
+          id="scene-5"
           className="h-screen w-full shrink-0 relative overflow-hidden"
           style={{ transform: 'translate3d(0,0,0)', willChange: 'transform' }}
         >
-          <Scene5Galaxy
-            settings={settings}
-            photos={galaxyPhotos}
-            onSelectPhoto={(photo) => setSelectedPhoto(photo)}
-            onRestart={() => goToSection(0)}
-            active={currentSectionIndex >= 3}
-          />
+          <Suspense fallback={<div className="w-full h-full bg-slate-950" />}>
+            <Scene5Galaxy
+              settings={settings}
+              photos={galaxyPhotos}
+              onSelectPhoto={(photo) => setSelectedPhoto(photo)}
+              onRestart={() => goToSection(0)}
+              active={currentSectionIndex >= 3}
+            />
+          </Suspense>
         </section>
       </motion.div>
 

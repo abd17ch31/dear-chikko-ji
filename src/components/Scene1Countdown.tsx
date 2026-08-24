@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import confetti from 'canvas-confetti';
 import { Flame, Sparkles, Heart } from 'lucide-react';
@@ -10,7 +10,7 @@ interface Scene1CountdownProps {
   onCountdownComplete: () => void;
 }
 
-export const Scene1Countdown: React.FC<Scene1CountdownProps & { active?: boolean }> = ({
+export const Scene1Countdown: React.FC<Scene1CountdownProps & { active?: boolean }> = memo(({
   yearsCount,
   partnerName,
   onCountdownComplete,
@@ -205,4 +205,4 @@ export const Scene1Countdown: React.FC<Scene1CountdownProps & { active?: boolean
       </AnimatePresence>
     </div>
   );
-};
+});

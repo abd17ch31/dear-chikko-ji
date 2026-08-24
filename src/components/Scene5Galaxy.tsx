@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, memo } from 'react';
 import { MemoryPhoto, AnniversarySettings } from '../types';
 import StellarCardGallery from './ui/3d-image-gallery';
 import { RotateCcw } from 'lucide-react';
@@ -11,7 +11,7 @@ interface Scene5GalaxyProps {
   onRestart: () => void;
 }
 
-export const Scene5Galaxy: React.FC<Scene5GalaxyProps & { active?: boolean }> = ({
+export const Scene5Galaxy: React.FC<Scene5GalaxyProps & { active?: boolean }> = memo(({
   settings,
   photos,
   onSelectPhoto,
@@ -55,4 +55,4 @@ export const Scene5Galaxy: React.FC<Scene5GalaxyProps & { active?: boolean }> = 
       </div>
     </div>
   );
-};
+});

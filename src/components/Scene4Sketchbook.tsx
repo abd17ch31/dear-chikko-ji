@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, memo } from 'react';
 import { ScrapbookPage, AnniversarySettings } from '../types';
 import { Heart, MoveRight } from 'lucide-react';
 import HTMLFlipBook from 'react-pageflip';
@@ -37,7 +37,7 @@ const Page = React.forwardRef<HTMLDivElement, { children: React.ReactNode; isLef
 );
 Page.displayName = 'Page';
 
-export const Scene4Sketchbook: React.FC<Scene4SketchbookProps> = ({
+export const Scene4Sketchbook: React.FC<Scene4SketchbookProps> = memo(({
   settings,
   pages,
   onNextScene,
@@ -46,7 +46,7 @@ export const Scene4Sketchbook: React.FC<Scene4SketchbookProps> = ({
   const flipBookRef = useRef<any>(null);
   const moonImageUrl = '/images/bookflow/moon.png';
 
-  const bookPages = [];
+  const bookPages: React.ReactNode[] = [];
   pages.forEach((page, index) => {
     bookPages.push(
       <Page key={`page-left-${index}`} isLeft={true}>
@@ -215,4 +215,4 @@ export const Scene4Sketchbook: React.FC<Scene4SketchbookProps> = ({
       </div>
     </div>
   );
-};
+});

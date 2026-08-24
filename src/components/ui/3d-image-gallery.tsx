@@ -1,6 +1,6 @@
 "use client"
 
-import React, { Suspense, useEffect, useMemo, useRef, useState, createContext, useContext } from "react"
+import React, { Suspense, useEffect, useMemo, useRef, useState, createContext, useContext, memo } from "react"
 import * as THREE from "three"
 import { Canvas, useFrame } from "@react-three/fiber"
 import {
@@ -51,14 +51,14 @@ function StarfieldBackground() {
 
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000)
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+    const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: "high-performance" })
     renderer.setSize(window.innerWidth, window.innerHeight)
-    renderer.setPixelRatio(window.devicePixelRatio)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.setClearColor(0x000000, 1)
     mountRef.current.appendChild(renderer.domElement)
 
     const starsGeometry = new THREE.BufferGeometry()
-    const starsCount = 10000
+    const starsCount = 500
     const positions = new Float32Array(starsCount * 3)
     for (let i = 0; i < starsCount; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 2000
@@ -103,7 +103,7 @@ function StarfieldBackground() {
   return <div ref={mountRef} className="absolute top-0 left-0 w-full h-full z-0 bg-black" />
 }
 
-function FloatingCard({
+const FloatingCard = memo(function FloatingCard({
   card,
   position,
 }: {
@@ -174,7 +174,7 @@ function FloatingCard({
               src={imgSrc}
               alt={card.alt || card.title}
               className="w-full h-full object-cover rounded-lg pointer-events-none"
-              loading="eager"
+              loading="lazy"
               draggable={false}
               onError={handleImageError}
             />
@@ -186,7 +186,7 @@ function FloatingCard({
       </Html>
     </group>
   )
-}
+})
 
 function CardGalaxy() {
   const { cards } = useCard()
@@ -217,13 +217,13 @@ function CardGalaxy() {
 
   return (
     <group ref={galaxyGroupRef}>
-      <Sphere args={[2, 32, 32]} position={[0, 0, 0]}>
+      <Sphere args={[2, 16, 16]} position={[0, 0, 0]}>
         <meshStandardMaterial color="#1a1a2e" transparent opacity={0.15} wireframe />
       </Sphere>
-      <Sphere args={[10, 32, 32]} position={[0, 0, 0]}>
+      <Sphere args={[10, 16, 16]} position={[0, 0, 0]}>
         <meshStandardMaterial color="#31b8c6" transparent opacity={0.05} wireframe />
       </Sphere>
-      <Sphere args={[14, 32, 32]} position={[0, 0, 0]}>
+      <Sphere args={[14, 16, 16]} position={[0, 0, 0]}>
         <meshStandardMaterial color="#31b8c6" transparent opacity={0.03} wireframe />
       </Sphere>
 
